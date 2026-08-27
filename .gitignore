@@ -1,0 +1,3 @@
+# Licensed font file — already embedded as a data URI inside card.html,
+# kept out of version control to avoid a second standalone copy of it.
+assets/
