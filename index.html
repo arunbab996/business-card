@@ -1,4 +1,5 @@
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
 <title>Handle With Care</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap">
@@ -39,7 +40,8 @@
     position:relative;
     width:100%;
     height:100vh;
-    min-height:560px;
+    height:100dvh; /* mobile browser chrome resizes the viewport; dvh tracks it, vh doesn't */
+    min-height:420px;
     display:flex;
     align-items:center;
     justify-content:center;
@@ -198,7 +200,7 @@
 
   .toolbar{
     left:50%;
-    bottom:clamp(16px, 3vh, 32px);
+    bottom:calc(clamp(16px, 3vh, 32px) + env(safe-area-inset-bottom));
     transform:translateX(-50%);
     display:flex;
     align-items:center;
@@ -208,15 +210,15 @@
   }
 
   .flip-btn.tool{
-    top:20px;
-    left:20px;
+    top:max(20px, env(safe-area-inset-top) + 12px);
+    left:max(20px, env(safe-area-inset-left) + 12px);
     border-radius:999px;
     padding:7px 13px;
   }
 
   .close-btn{
-    top:20px;
-    right:20px;
+    top:max(20px, env(safe-area-inset-top) + 12px);
+    right:max(20px, env(safe-area-inset-right) + 12px);
     width:32px;
     height:32px;
     border-radius:50%;
@@ -269,6 +271,16 @@
   @media (prefers-reduced-motion: reduce){
     .card-scene{ transition:none; }
   }
+
+  /* Narrow phones: four labeled buttons plus Flip don't all fit comfortably,
+     so drop to icon-only chrome — the title attribute still gives a label
+     on long-press/hover, and the shapes are distinct enough at a glance. */
+  @media (max-width:400px){
+    .tool-label{ display:none; }
+    .tool{ padding:8px; }
+    .toolbar{ gap:2px; padding:4px; }
+    .flip-btn.tool{ padding:8px; }
+  }
 </style>
 
 <div class="stage closed" id="stage">
@@ -291,7 +303,7 @@
 
   <button class="tool flip-btn" id="btnFlip" title="Flip the card">
     <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><path d="M17 3v4a2 2 0 0 1-2 2H4"/><path d="M7 21v-4a2 2 0 0 1 2-2h11"/><path d="M7 7 4 4l3-3" transform="translate(0 3)"/><path d="M17 17l3 3-3 3" transform="translate(0 -3)"/></svg>
-    Flip
+    <span class="tool-label">Flip</span>
   </button>
 
   <button class="close-btn" id="btnClose" title="Tuck the card away">
@@ -301,19 +313,19 @@
   <div class="toolbar" id="toolbar">
     <button class="tool" id="btnPaint" title="Drag to splatter paint">
       <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><path d="M12 2c3 3 6 6.5 6 10a6 6 0 0 1-12 0c0-3.5 3-7 6-10Z"/></svg>
-      Paint
+      <span class="tool-label">Paint</span>
     </button>
     <button class="tool" id="btnBurn" title="Press and hold to burn">
       <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><path d="M12 22c4 0 6-2.5 6-6 0-3-2-4.5-2.5-7-1.5 1.5-2.5 2.5-2.5 4.5C13 10 11 8 11 5c-3 2-6 6-6 10 0 4 3 6 7 7Z"/></svg>
-      Burn
+      <span class="tool-label">Burn</span>
     </button>
     <button class="tool" id="btnShred" title="Shred the card">
       <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><path d="M6 3h12M9 3v6M12 3v10M15 3v6M9 13l-3 8M12 13v8M15 13l3 8"/></svg>
-      Shred
+      <span class="tool-label">Shred</span>
     </button>
     <button class="tool" id="btnReset" title="Restore the card">
       <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 3v5h5"/></svg>
-      Reset
+      <span class="tool-label">Reset</span>
     </button>
   </div>
 </div>
