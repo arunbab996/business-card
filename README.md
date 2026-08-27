@@ -18,7 +18,7 @@ It's a single static file with no build step or dependencies:
 python3 -m http.server 8934
 ```
 
-Then open `http://localhost:8934/card.html`.
+Then open `http://localhost:8934`.
 
 ## Notes
 
